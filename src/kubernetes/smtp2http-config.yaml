@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: smtp2http-config
+  namespace: nip05
+data:
+  smtp.domains: nip05.social,nostrcom.com,unitednostr.com,nostrid.info,nip05.cloud,protonostr.com

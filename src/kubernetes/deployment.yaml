@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: smtp2http
+  namespace: nip05
+  labels:
+    app: smtp2http
+spec:
+  type: ClusterIP
+  ports:
+  - port: 3000
+    protocol: TCP
+  selector:
+    app: smtp2http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smtp2http
+  namespace: nip05
+  labels:
+    app: smtp2http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smtp2http
+  template:
+    metadata:
+      labels:
+        app: smtp2http
+    spec:
+      containers:
+      - name: smtp2http-image
+        image: iijat.azurecr.io/smtp2http:latest
+        imagePullPolicy: Always
+        env:
+        - name: SMTP_DOMAINS
+          valueFrom:
+            configMapKeyRef:
+              name: smtp2http-config
+              key: smtp.domains
+        - name: WEBHOOK_URL
+          valueFrom:
+            secretKeyRef:
+              name: smtp2http-secret
+              key: webhookUrl
+        - name: AUTH_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: smtp2http-secret
+              key: auth.apiKey
+        - name: AUTH_API_HEADER
+          valueFrom:
+            secretKeyRef:
+              name: smtp2http-secret
+              key: auth.apiHeader
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+          requests:
+            cpu: "0.1"
+            memory: "256Mi"
