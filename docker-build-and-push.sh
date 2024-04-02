@@ -1,3 +1,5 @@
+npm run build
+
 docker build -t smtp2http-image:latest .
 
 docker tag smtp2http-image:latest iijat.azurecr.io/smtp2http:latest
