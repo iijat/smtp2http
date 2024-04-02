@@ -72,4 +72,8 @@ const server = new SMTPServer({
   banner: "Allow emails to " + smtpDomains.join(", "),
 });
 
+server.on("error", (err) => {
+  log(`Error: ${err.message}`, "error");
+});
+
 server.listen(3000);
