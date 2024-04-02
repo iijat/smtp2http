@@ -50,7 +50,7 @@ const server = new SMTPServer({
           parsed.attachments = [];
         }
 
-        log(`Parsed: (${webhookAttachments.numberOfAttachments} attachments)`);
+        //log(`Parsed: (${webhookAttachments.numberOfAttachments} attachments)`);
         //log(JSON.stringify(parsed));
 
         webhookAsync(session, parsed, webhookAttachments)
