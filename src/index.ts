@@ -38,6 +38,9 @@ const server = new SMTPServer({
     log("Session:");
     log(JSON.stringify(session));
 
+    // It is important to store the session snapshot as the data will change during the stream.
+    const sessionSnapshot = JSON.parse(JSON.stringify(session));
+
     simpleParser(stream, {}, (err, parsed) => {
       if (err) {
         log(`Error: ${err}`, "error");
@@ -51,9 +54,10 @@ const server = new SMTPServer({
         }
 
         //log(`Parsed: (${webhookAttachments.numberOfAttachments} attachments)`);
+        //log("Parsed:");
         //log(JSON.stringify(parsed));
 
-        webhookAsync(session, parsed, webhookAttachments)
+        webhookAsync(sessionSnapshot, parsed, webhookAttachments)
           .then(() => {
             log("Webhook triggered");
           })
